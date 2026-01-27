@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Học đa ngôn ngữ (Flashcard)</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="bo-qua" href="#noi-dung-chinh">Bỏ qua đến nội dung chính</a>
+
+  <header class="thanh-dau">
+    <div class="logo" aria-label="Logo">📚 Học từ vựng</div>
+
+    <div class="tim-kiem">
+      <input id="oTim" type="search" inputmode="search" placeholder="Tìm từ, nghĩa, thẻ…" aria-label="Tìm kiếm" />
+      <button id="btnXoaTim" class="nut nut-phu" title="Xóa tìm kiếm" aria-label="Xóa tìm kiếm">✕</button>
+    </div>
+
+    <div class="nhom-nut">
+      <button id="btnCheDo" class="nut" aria-haspopup="dialog" title="Chọn chế độ học">Chế độ</button>
+      <button id="btnCaiDat" class="nut nut-phu" aria-haspopup="dialog" title="Cài đặt">Cài đặt</button>
+    </div>
+  </header>
+
+  <div class="khung">
+    <nav class="thanh-ben" aria-label="Điều hướng">
+      <div class="the-tab" role="tablist" aria-label="Thẻ điều hướng">
+        <button class="tab is-active" role="tab" aria-selected="true" data-tab="chu-de">Chủ đề</button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="tat-ca">Tất cả</button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="on-tap">Ôn tập</button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="nhap-xuat">Nhập/Xuất</button>
+      </div>
+
+      <section id="tab-chu-de" class="noi-dung-tab" data-tab-panel="chu-de">
+        <div class="tieu-de-nho">Chủ đề</div>
+        <div id="dsChuDe" class="danh-sach"></div>
+      </section>
+
+      <section id="tab-tat-ca" class="noi-dung-tab is-hidden" data-tab-panel="tat-ca">
+        <div class="tieu-de-nho">Bộ lọc</div>
+        <div class="bo-loc">
+          <label class="nhan">
+            Trạng thái
+            <select id="locTrangThai">
+              <option value="tat-ca">Tất cả</option>
+              <option value="chua-hoc">Chưa học</option>
+              <option value="dang-hoc">Đang học</option>
+              <option value="da-thuoc">Đã thuộc</option>
+            </select>
+          </label>
+          <label class="nhan">
+            Độ khó
+            <select id="locDoKho">
+              <option value="tat-ca">Tất cả</option>
+              <option value="1">1 (Dễ)</option>
+              <option value="2">2 (Vừa)</option>
+              <option value="3">3 (Khó)</option>
+            </select>
+          </label>
+          <label class="nhan">
+            Chủ đề
+            <select id="locChuDe"></select>
+          </label>
+        </div>
+
+        <div class="tieu-de-nho">Danh sách</div>
+        <div id="dsTatCa" class="danh-sach danh-sach-lon"></div>
+      </section>
+
+      <section id="tab-on-tap" class="noi-dung-tab is-hidden" data-tab-panel="on-tap">
+        <div class="tieu-de-nho">Ôn tập</div>
+        <div class="mo-ta">
+          Tại đây bạn sẽ học lại các mục đã đánh dấu <b>Từ khó</b> hoặc các mục chưa thuộc.
+        </div>
+        <div class="nhom-nut-doc">
+          <button id="btnOnTuKho" class="nut">Ôn lại từ khó</button>
+          <button id="btnOnChuaThuoc" class="nut nut-phu">Ôn mục chưa thuộc</button>
+        </div>
+      </section>
+
+      <section id="tab-nhap-xuat" class="noi-dung-tab is-hidden" data-tab-panel="nhap-xuat">
+        <div class="tieu-de-nho">Nhập dữ liệu</div>
+        <div class="mo-ta">
+          Tải lên JSON (khuyến nghị) hoặc CSV. Dữ liệu sẽ được lưu trên trình duyệt của bạn.
+        </div>
+        <div class="nhom-nut-doc">
+          <input id="tepTaiLen" type="file" accept=".json,.csv,application/json,text/csv" />
+          <div class="hang">
+            <button id="btnNhapGop" class="nut">Nhập (Gộp)</button>
+            <button id="btnNhapThay" class="nut nut-phu">Nhập (Thay thế)</button>
+          </div>
+        </div>
+
+        <div class="tieu-de-nho">Xuất dữ liệu</div>
+        <div class="nhom-nut-doc">
+          <button id="btnXuatJson" class="nut">Tải JSON hiện tại</button>
+          <a class="nut nut-phu" href="data/mau-tai-len.json" download>Tải mẫu JSON</a>
+        </div>
+
+        <div class="tieu-de-nho">Quản lý</div>
+        <div class="nhom-nut-doc">
+          <button id="btnKhoiPhucMacDinh" class="nut nut-nguy-hiem">Khôi phục gói mặc định</button>
+          <button id="btnXoaDuLieu" class="nut nut-nguy-hiem nut-phu">Xóa dữ liệu & tiến độ</button>
+        </div>
+
+        <div class="tieu-de-nho">Nhật ký</div>
+        <pre id="nhatKy" class="nhat-ky" aria-live="polite"></pre>
+      </section>
+    </nav>
+
+    <main id="noi-dung-chinh" class="noi-dung">
+      <section class="the-chinh">
+        <div class="hang tren">
+          <div class="tieu-de-card">
+            <div class="dong">
+              <span class="chip" id="chipChuDe">—</span>
+              <span class="chip chip-phu" id="chipGoi">—</span>
+            </div>
+            <div class="dong nho" id="dongChiMuc">0 / 0</div>
+          </div>
+
+          <div class="nut-nhanh">
+            <button id="btnDanhDauKho" class="nut nut-phu" title="Đánh dấu từ khó (K)" aria-pressed="false">⭐ Từ khó</button>
+            <button id="btnHuongDan" class="nut nut-phu" aria-haspopup="dialog" title="Hướng dẫn nhanh">Hướng dẫn</button>
+          </div>
+        </div>
+
+        <article id="flashcard" class="flashcard" tabindex="0" aria-label="Thẻ học">
+          <div class="mat truoc" aria-hidden="false">
+            <div class="term" id="oTerm">—</div>
+            <div class="ipa" id="oIpa"></div>
+          </div>
+          <div class="mat sau" aria-hidden="true">
+            <div class="meaning" id="oMeaning">—</div>
+            <div class="example" id="oExample"></div>
+            <div class="example-vi" id="oExampleVi"></div>
+          </div>
+        </article>
+
+        <div class="hang giua">
+          <div class="nhom">
+            <button id="btnTruoc" class="nut" title="Mục trước (←)">Trước</button>
+            <button id="btnLat" class="nut nut-phu" title="Lật thẻ (Space)">Lật</button>
+            <button id="btnTiep" class="nut" title="Mục tiếp (→)">Tiếp</button>
+          </div>
+
+          <div class="nhom">
+            <button id="btnTuDong" class="nut" aria-pressed="false" title="Bật/tắt tự động (A)">Tự động</button>
+            <label class="nhan nho">
+              Mỗi
+              <input id="oKhoang" type="range" min="3" max="10" value="5" />
+              <span id="lblGiay">5s</span>
+            </label>
+          </div>
+
+          <div class="nhom">
+            <label class="nhan nho"><input id="anHienNghia" type="checkbox" checked /> Hiện nghĩa</label>
+            <label class="nhan nho"><input id="anHienIpa" type="checkbox" /> Hiện IPA</label>
+            <label class="nhan nho"><input id="anHienViDu" type="checkbox" checked /> Hiện ví dụ</label>
+          </div>
+        </div>
+
+        <div class="hang duoi">
+          <div class="nhom">
+            <label class="nhan">
+              Trạng thái
+              <select id="chonTrangThai">
+                <option value="chua-hoc">Chưa học</option>
+                <option value="dang-hoc">Đang học</option>
+                <option value="da-thuoc">Đã thuộc</option>
+              </select>
+            </label>
+            <label class="nhan">
+              Độ khó
+              <select id="chonDoKho">
+                <option value="1">1 (Dễ)</option>
+                <option value="2">2 (Vừa)</option>
+                <option value="3">3 (Khó)</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="nhom nho">
+            <button id="btnCheDoHocChuDe" class="nut nut-phu">Học theo chủ đề</button>
+            <button id="btnCheDoHocNgauNhien" class="nut nut-phu">Học ngẫu nhiên</button>
+          </div>
+        </div>
+      </section>
+
+      <footer class="chan">
+        <div class="tien-do">
+          <div class="dong">
+            <b>Tiến độ</b>
+            <span id="lblTienDoTong">—</span>
+          </div>
+          <div class="thanh">
+            <div id="barTong" class="bar" style="width:0%"></div>
+          </div>
+        </div>
+
+        <div class="phim-tat">
+          Phím tắt: <kbd>Space</kbd> lật • <kbd>←</kbd>/<kbd>→</kbd> trước/tiếp • <kbd>A</kbd> tự động • <kbd>K</kbd> từ khó • <kbd>/</kbd> tìm kiếm
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Hộp thoại chế độ -->
+  <dialog id="dlgCheDo" class="hop-thoai">
+    <form method="dialog" class="hop-thoai-noi-dung">
+      <div class="tieu-de-hop">Chọn chế độ học</div>
+      <div class="lua-chon">
+        <label><input type="radio" name="mode" value="chu-de" checked /> Học theo chủ đề</label>
+        <label><input type="radio" name="mode" value="ngau-nhien" /> Học ngẫu nhiên</label>
+        <label><input type="radio" name="mode" value="tu-kho" /> Ôn lại từ khó</label>
+      </div>
+      <div class="hang">
+        <button class="nut">Áp dụng</button>
+        <button class="nut nut-phu" value="cancel">Đóng</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Hộp thoại cài đặt -->
+  <dialog id="dlgCaiDat" class="hop-thoai">
+    <form method="dialog" class="hop-thoai-noi-dung">
+      <div class="tieu-de-hop">Cài đặt</div>
+
+      <label class="nhan">
+        Ngôn ngữ (gói học)
+        <select id="chonGoi"></select>
+      </label>
+
+      <label class="nhan">
+        Giao diện
+        <select id="chonGiaoDien">
+          <option value="tu-dong">Tự động</option>
+          <option value="sang">Sáng</option>
+          <option value="toi">Tối</option>
+        </select>
+      </label>
+
+      <div class="hang">
+        <button class="nut">Lưu</button>
+        <button class="nut nut-phu" value="cancel">Đóng</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Hộp thoại hướng dẫn -->
+  <dialog id="dlgHuongDan" class="hop-thoai">
+    <form method="dialog" class="hop-thoai-noi-dung">
+      <div class="tieu-de-hop">Hướng dẫn nhanh</div>
+      <div class="noi-dung-huong-dan">
+        <ul>
+          <li>Mở ứng dụng là học được ngay (đã có gói tiếng Anh).</li>
+          <li>Chọn <b>Chủ đề</b> ở thanh bên để học theo chủ đề.</li>
+          <li>Dùng <b>Chế độ</b> để chuyển học ngẫu nhiên hoặc ôn từ khó.</li>
+          <li>Nhấn <b>⭐ Từ khó</b> để đánh dấu; mục này sẽ xuất hiện ở <b>Ôn tập</b>.</li>
+          <li>Tiến độ được lưu trên thiết bị của bạn (không cần tài khoản).</li>
+          <li>Nhập dữ liệu: vào <b>Nhập/Xuất</b> → chọn file JSON/CSV → Nhập (Gộp/Thay thế).</li>
+        </ul>
+        <p class="chu-y">
+          Lưu ý: IPA là trường tùy chọn. Bạn có thể bổ sung IPA trong dữ liệu tải lên.
+        </p>
+      </div>
+      <div class="hang">
+        <button class="nut">Đã hiểu</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
