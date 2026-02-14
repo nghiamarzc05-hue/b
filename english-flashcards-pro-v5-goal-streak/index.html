@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>English Flashcards Pro</title>
+  <meta name="theme-color" content="#2563eb" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip" href="#main">Bỏ qua đến nội dung chính</a>
+
+  <div class="shell" id="shell">
+    <!-- Sidebar (desktop) -->
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand__mark" aria-hidden="true">🇺🇸</div>
+        <div class="brand__text">
+          <div class="brand__title">English Flashcards</div>
+          <div class="brand__sub">Learn • Review • Progress</div>
+        </div>
+      </div>
+
+      <div class="sidebarActions">
+        <button class="btn btn--ghost w-full" id="btnAddDeck" type="button">
+          <span class="btn__icon">＋</span><span>Add Deck</span>
+        </button>
+        <button class="btn btn--ghost w-full" id="btnAddCard" type="button">
+          <span class="btn__icon">＋</span><span>Add Card</span>
+        </button>
+      </div>
+
+      <div class="input" role="search">
+        <span class="input__icon" aria-hidden="true">🔎</span>
+        <input id="deckSearch" type="search" placeholder="Search decks..." autocomplete="off">
+      </div>
+
+      <nav class="decklist" id="deckList" aria-label="Deck list"></nav>
+
+      <div class="sidebar__footer">
+        <div class="kbdRow">
+          <span class="kbd">Space</span> flip
+          <span class="spacer"></span>
+          <span class="kbd">←</span><span class="kbd">→</span> prev/next
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main" id="main">
+      <header class="topbar">
+        <div class="topbar__left">
+          <button class="iconbtn hide-desktop" id="btnMenu" aria-label="Open menu" type="button">☰</button>
+          <div class="crumb">
+            <div class="crumb__title" id="pageTitle">Home</div>
+            <div class="crumb__sub" id="pageSub">Welcome back</div>
+          </div>
+        </div>
+
+        <div class="topbar__center hide-mobile">
+          <div class="input input--wide" role="search">
+            <span class="input__icon" aria-hidden="true">🔎</span>
+            <input id="globalSearch" type="search" placeholder="Search cards..." autocomplete="off">
+          </div>
+        </div>
+
+        <div class="topbar__right">
+          <button class="iconbtn" type="button" id="btnInstall" title="Install" aria-label="Install app">⬇️</button>
+          <button class="iconbtn" type="button" data-nav="settings" aria-label="Open settings">⚙️</button>
+          <div class="avatar" title="Profile" aria-label="Profile">🙂</div>
+        </div>
+      </header>
+
+      <!-- Pages -->
+      <section class="page page--active" id="page-home" aria-labelledby="homeTitle">
+        <h1 class="heroTitle" id="homeTitle">Welcome Back!</h1>
+        <p class="heroSub">Ready to continue learning?</p>
+
+        <div class="card card--pad card--soft">
+          <div class="card__header">Continue Learning</div>
+          <div class="continue">
+            <div class="continue__banner">
+              <div class="continue__title" id="continueDeckName">English Vocabulary</div>
+              <div class="continue__meta">
+                <span class="pill pill--ghost" id="continueMode">Manual Mode</span>
+                <span class="dot">•</span>
+                <span id="continueLeft">12 cards left</span>
+              </div>
+            </div>
+            <button class="btn btn--primary continue__btn" type="button" data-nav="learn">Continue</button>
+          </div>
+        </div>
+
+        <h2 class="sectionTitle">Quick Start</h2>
+        <div class="grid2">
+          <button class="tile tile--blue" type="button" data-start="manual">
+            <div class="tile__text">
+              <div class="tile__title">Learn Manually</div>
+              <div class="tile__sub">Tap to flip • Control pace</div>
+            </div>
+            <div class="tile__art" aria-hidden="true">🃏</div>
+          </button>
+
+          <button class="tile tile--teal" type="button" data-start="auto">
+            <div class="tile__text">
+              <div class="tile__title">Learn Automatically</div>
+              <div class="tile__sub">Auto timing • Hands-free</div>
+            </div>
+            <div class="tile__art" aria-hidden="true">▶️</div>
+          </button>
+        </div>
+
+        <h2 class="sectionTitle">Today's Focus</h2>
+        <div class="grid2">
+          <div class="mini">
+            <div class="mini__icon">⭐</div>
+            
+
+        <h2 class="sectionTitle">Daily Goal</h2>
+        <div class="grid2">
+          <div class="card card--pad card--soft goalCard">
+            <div class="goalHead">
+              <div>
+                <div class="goalTitle">Today's goal</div>
+                <div class="goalSub"><span id="goalDone">0</span> / <span id="goalTarget">20</span> cards</div>
+              </div>
+              <div class="goalChip" id="streakChip">🔥 0 day streak</div>
+            </div>
+            <div class="goalBar">
+              <div class="goalBar__fill" id="goalBarFill" style="width:0%"></div>
+            </div>
+            <div class="goalMeta">
+              <span class="muted" id="goalHint">Study a few cards to start your streak.</span>
+              <button class="btn btn--ghost" type="button" data-nav="settings">Edit goal</button>
+            </div>
+          </div>
+
+          <div class="card card--pad card--soft goalCard">
+            <div class="goalTitle">This week</div>
+            <div class="goalWeek">
+              <div class="weekRow" id="weekRow"></div>
+              <div class="weekLegend">
+                <span class="muted">Mon</span><span class="muted">Tue</span><span class="muted">Wed</span><span class="muted">Thu</span><span class="muted">Fri</span><span class="muted">Sat</span><span class="muted">Sun</span>
+              </div>
+            </div>
+            <div class="goalMeta">
+              <span class="muted" id="weekHint">Complete your goal today to keep the streak.</span>
+            </div>
+          </div>
+        </div>
+<div>
+              <div class="mini__title">Learn New Words</div>
+              <div class="mini__sub" id="newWordsCount">10 words</div>
+            </div>
+          </div>
+          <div class="mini">
+            <div class="mini__icon">✅</div>
+            <div>
+              <div class="mini__title">Review Words</div>
+              <div class="mini__sub" id="reviewWordsCount">0 to review</div>
+            </div>
+          </div>
+        </div>
+
+        <h2 class="sectionTitle">Get Started</h2>
+        <div class="onboard" aria-label="Onboarding cards">
+          <div class="onboard__track">
+            <div class="obCard">
+              <div class="obCard__title">Create a List</div>
+              <div class="obCard__sub">Organize your vocabulary</div>
+              <div class="obCard__icon">📒</div>
+            </div>
+            <div class="obCard">
+              <div class="obCard__title">Add New Words</div>
+              <div class="obCard__sub">Build your deck quickly</div>
+              <div class="obCard__icon">➕</div>
+            </div>
+            <div class="obCard">
+              <div class="obCard__title">Review Words</div>
+              <div class="obCard__sub">Focus on weak items</div>
+              <div class="obCard__icon">🧠</div>
+            </div>
+            <div class="obCard">
+              <div class="obCard__title">Track Progress</div>
+              <div class="obCard__sub">See what you learned</div>
+              <div class="obCard__icon">📈</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="page-learn" aria-labelledby="learnTitle">
+        <div class="learnTop">
+          <h2 class="pageH" id="learnTitle">Learn</h2>
+          <div class="toggles">
+            <label class="switch">
+              <input id="toggleAuto" type="checkbox">
+              <span class="switch__track"></span>
+              <span class="switch__label">Auto</span>
+            </label>
+            <label class="switch">
+              <input id="toggleRandom" type="checkbox">
+              <span class="switch__track"></span>
+              <span class="switch__label">Random</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="learnLayout">
+          <div class="learnCenter">
+            <div class="card card--pad card--glass">
+              <div class="flashWrap">
+                <button class="flash" id="flash" type="button" aria-label="Flashcard (click to flip)">
+                  <div class="flash__face flash__front">
+                    <div class="flash__wordRow">
+                      <div class="flash__word" id="cardWord">abundant</div>
+                      <button class="iconbtn iconbtn--small" id="btnSpeak" type="button" aria-label="Speak word">🔊</button>
+                    </div>
+                    <div class="flash__phonetic" id="cardPhonetic">/əˈbʌndənt/</div>
+                    <div class="flash__hint">Click to reveal meaning</div>
+                  </div>
+
+                  <div class="flash__face flash__back">
+                    <div class="flash__meaning" id="cardMeaning">dồi dào, phong phú</div>
+                    <div class="flash__example">
+                      <div class="flash__exEn" id="cardExampleEn">The forest is abundant with wildlife.</div>
+                      <div class="flash__exVi" id="cardExampleVi">Khu rừng rất dồi dào động vật hoang dã.</div>
+                    </div>
+                    <div class="flash__actions">
+                      <button class="chip chip--good" id="btnRemember" type="button">Đã nhớ</button>
+                      <button class="chip chip--warn" id="btnHard" type="button">Từ khó</button>
+                      <button class="chip chip--bad" id="btnAgain" type="button">Chưa nhớ</button>
+                    </div>
+                  </div>
+                </button>
+              </div>
+
+              <div class="player">
+                <button class="pbtn" id="btnPrev" type="button" aria-label="Previous">⏮</button>
+                <button class="pbtn" id="btnShuffle" type="button" aria-label="Shuffle">🔀</button>
+                <button class="pbtn pbtn--play" id="btnPlay" type="button" aria-label="Play/Pause">▶</button>
+                <button class="pbtn" id="btnNext" type="button" aria-label="Next">⏭</button>
+                <button class="pbtn" id="btnSpeak2" type="button" aria-label="Speak content">🔊</button>
+              </div>
+
+              <div class="counter">
+                <span id="cardIndex">1</span> / <span id="cardTotal">1</span>
+              </div>
+            </div>
+          </div>
+
+          <aside class="panel hide-mobile" id="rightPanel">
+            <div class="card card--pad panelCard">
+              <div class="panelTitle">
+                <span class="folder">📁</span>
+                <span id="panelDeckName">Common Vocabulary</span>
+              </div>
+
+              <div class="panelStat">
+                <div class="panelStat__left">
+                  <div class="statBig"><span id="panelDone">0</span> / <span id="panelTotal">0</span></div>
+                  <div class="statLabel">Words</div>
+                  <div class="statSmall">Avg Time/Card: <strong id="panelAvg">—</strong></div>
+                  <div class="statBadge" id="panelLevel">A2 • Elementary</div>
+                </div>
+                <div class="ring" id="progressRing" aria-label="Progress ring">
+                  <div class="ring__inner">
+                    <div class="ring__pct" id="panelPct">0%</div>
+                    <div class="ring__lbl">Progress</div>
+                  </div>
+                </div>
+              </div>
+
+              <button class="btn btn--ghost w-full" id="btnReshuffle" type="button">RESHUFFLE</button>
+            </div>
+
+            <div class="card card--pad panelCard">
+              <div class="panelTitle">SETTINGS</div>
+
+              <div class="field">
+                <div class="field__row">
+                  <div class="field__label">Auto Timing</div>
+                  <div class="field__hint">Front / Back (seconds)</div>
+                </div>
+                <div class="range2">
+                  <div class="range">
+                    <span class="range__name">Front</span>
+                    <input id="rangeFront" type="range" min="2" max="12" step="1" value="4">
+                    <span class="range__val" id="valFront">4s</span>
+                  </div>
+                  <div class="range">
+                    <span class="range__name">Back</span>
+                    <input id="rangeBack" type="range" min="2" max="12" step="1" value="6">
+                    <span class="range__val" id="valBack">6s</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field">
+                <div class="field__row">
+                  <div class="field__label">Voice</div>
+                  <div class="field__hint">UK / US</div>
+                </div>
+                <div class="seg" role="tablist" aria-label="Voice">
+                  <button class="seg__btn seg__btn--active" type="button" data-voice="uk">UK</button>
+                  <button class="seg__btn" type="button" data-voice="us">US</button>
+                </div>
+              </div>
+
+              <div class="field">
+                <div class="field__row">
+                  <div class="field__label">Speak Content</div>
+                </div>
+                <label class="radio">
+                  <input type="radio" name="speak" value="word" checked>
+                  <span>Word only</span>
+                </label>
+                <label class="radio">
+                  <input type="radio" name="speak" value="word_example">
+                  <span>Word + example</span>
+                </label>
+
+                <button class="btn btn--primary w-full" id="btnSaveSettings" type="button">SAVE</button>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="page" id="page-review" aria-labelledby="reviewTitle">
+        <h2 class="pageH" id="reviewTitle">Review</h2>
+        <div class="card card--pad card--soft">
+          <div class="emptyTitle">Review mode</div>
+          <p class="muted">Đánh dấu “Từ khó” hoặc “Chưa nhớ” trong Learn. Sau đó quay lại đây để ôn tập.</p>
+          <div class="reviewGrid">
+            <div class="reviewBox">
+              <div class="reviewBox__title">Từ khó</div>
+              <div class="reviewBox__num" id="hardCount">0</div>
+            </div>
+            <div class="reviewBox">
+              <div class="reviewBox__title">Chưa nhớ</div>
+              <div class="reviewBox__num" id="againCount">0</div>
+            </div>
+            <div class="reviewBox">
+              <div class="reviewBox__title">Đã nhớ</div>
+              <div class="reviewBox__num" id="rememberCount">0</div>
+            </div>
+          </div>
+          <button class="btn btn--primary" type="button" id="btnStartReview">Start review</button>
+        </div>
+      </section>
+
+      <section class="page" id="page-library" aria-labelledby="libraryTitle">
+        <h2 class="pageH" id="libraryTitle">Library</h2>
+        <div class="grid2">
+          <div class="card card--pad card--soft">
+            <div class="panelTitle">Decks</div>
+            <div id="libraryList" class="libList"></div>
+          </div>
+          <div class="card card--pad card--soft">
+            <div class="panelTitle">Import / Export</div>
+            <p class="muted">Export deck ra JSON để backup. Import JSON để khôi phục hoặc chia sẻ.</p>
+            <div class="stack">
+              <button class="btn btn--primary w-full" type="button" id="btnExport">Export current deck (JSON)</button>
+              <label class="btn btn--ghost w-full" for="fileImport" style="text-align:center;">Import deck (JSON)</label>
+              <input id="fileImport" type="file" accept="application/json" style="display:none;">
+              <div class="hint">GitHub Pages OK • Offline OK (PWA)</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="page-settings" aria-labelledby="settingsTitle">
+        <h2 class="pageH" id="settingsTitle">Settings</h2>
+        <div class="grid2">
+          <div class="card card--pad card--soft">
+            <div class="panelTitle">Theme</div>
+            <div class="seg" role="tablist" aria-label="Theme">
+              <button class="seg__btn seg__btn--active" type="button" data-theme="auto">Auto</button>
+              <button class="seg__btn" type="button" data-theme="light">Light</button>
+              <button class="seg__btn" type="button" data-theme="dark">Dark</button>
+            </div>
+            <p class="muted">Auto sẽ theo hệ thống. Bạn vẫn có thể đổi tại đây.</p>
+          </div>
+
+          <div class="card card--pad card--soft">
+            <div class="panelTitle">Data</div>
+            <button class="btn btn--ghost w-full" type="button" id="btnReset">Reset progress</button>
+            <p class="muted">Xoá tiến độ học trên máy này (localStorage).</p>
+          </div>
+        </div>
+
+
+          <div class="card card--pad card--soft">
+            <div class="panelTitle">Daily Goal</div>
+            <p class="muted">Set how many cards you want to study each day.</p>
+            <div class="goalSetting">
+              <label class="lab">Cards per day</label>
+              <input class="text" id="dailyGoalInput" type="number" min="1" max="500" step="1" value="20" />
+              <div class="modal__actions" style="justify-content:flex-start;">
+                <button class="btn btn--primary" type="button" id="btnSaveGoal">Save goal</button>
+                <button class="btn btn--ghost" type="button" id="btnResetStreak">Reset streak</button>
+              </div>
+              <div class="hint" id="goalSavedHint">Tip: Streak counts a day if you hit your goal.</div>
+            </div>
+          </div>
+
+      </section>
+
+      <!-- Mobile bottom nav -->
+      <nav class="bottomNav hide-desktop" aria-label="Bottom navigation">
+        <button class="bnav bnav--active" data-nav="home" type="button" aria-label="Home">
+          <span class="bnav__ico">🏠</span><span class="bnav__lbl">Home</span>
+        </button>
+        <button class="bnav" data-nav="learn" type="button" aria-label="Learn">
+          <span class="bnav__ico">🎓</span><span class="bnav__lbl">Learn</span>
+        </button>
+        <button class="bnav" data-nav="review" type="button" aria-label="Review">
+          <span class="bnav__ico">⏱</span><span class="bnav__lbl">Review</span>
+        </button>
+        <button class="bnav" data-nav="library" type="button" aria-label="Library">
+          <span class="bnav__ico">📚</span><span class="bnav__lbl">Library</span>
+        </button>
+        <button class="bnav" data-nav="settings" type="button" aria-label="Settings">
+          <span class="bnav__ico">⚙️</span><span class="bnav__lbl">Settings</span>
+        </button>
+      </nav>
+    </main>
+
+    <button class="scrim hide-desktop" id="scrim" aria-label="Close menu" type="button"></button>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <!-- Modals -->
+    <dialog class="modal" id="modalDeck">
+      <form method="dialog" class="modal__box" id="formDeck">
+        <div class="modal__head">
+          <div class="modal__title">Add Deck</div>
+          <button class="iconbtn" value="cancel" aria-label="Close" type="submit">✕</button>
+        </div>
+        <label class="lab">Deck name</label>
+        <input class="text" id="deckNameInput" placeholder="e.g., IELTS Basics" required />
+        <label class="lab">Icon (emoji)</label>
+        <input class="text" id="deckIconInput" placeholder="e.g., 📘" />
+        <div class="modal__actions">
+          <button class="btn btn--ghost" value="cancel" type="submit">Cancel</button>
+          <button class="btn btn--primary" value="ok" type="submit">Create</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="modal" id="modalCard">
+      <form method="dialog" class="modal__box" id="formCard">
+        <div class="modal__head">
+          <div class="modal__title">Add Card</div>
+          <button class="iconbtn" value="cancel" aria-label="Close" type="submit">✕</button>
+        </div>
+        <div class="grid2">
+          <div>
+            <label class="lab">Word</label>
+            <input class="text" id="cardWordInput" placeholder="abundant" required />
+          </div>
+          <div>
+            <label class="lab">Phonetic</label>
+            <input class="text" id="cardPhoneticInput" placeholder="/əˈbʌndənt/" />
+          </div>
+        </div>
+        <label class="lab">Meaning (VI)</label>
+        <input class="text" id="cardMeaningInput" placeholder="dồi dào, phong phú" required />
+        <label class="lab">Example (EN)</label>
+        <input class="text" id="cardExEnInput" placeholder="The forest is abundant with wildlife." />
+        <label class="lab">Example (VI)</label>
+        <input class="text" id="cardExViInput" placeholder="Khu rừng rất dồi dào động vật hoang dã." />
+        <div class="modal__actions">
+          <button class="btn btn--ghost" value="cancel" type="submit">Cancel</button>
+          <button class="btn btn--primary" value="ok" type="submit">Add</button>
+        </div>
+      </form>
+    </dialog>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
